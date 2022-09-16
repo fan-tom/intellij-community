@@ -1006,6 +1006,7 @@
     <action id="TypeHierarchyBase.BaseOnThisType" class="com.intellij.ide.hierarchy.TypeHierarchyBrowserBase$BaseOnThisTypeAction" use-shortcut-of="TypeHierarchy"/>
     <action id="MethodHierarchy.BaseOnThisMethod" class="com.intellij.ide.hierarchy.MethodHierarchyBrowserBase$BaseOnThisMethodAction" use-shortcut-of="MethodHierarchy"/>
     <action id="CallHierarchy.BaseOnThisMethod" class="com.intellij.ide.hierarchy.CallHierarchyBrowserBase$BaseOnThisMethodAction" use-shortcut-of="CallHierarchy"/>
+    <action id="CallHierarchy.RemoveSubtree" class="com.intellij.ide.hierarchy.actions.RemoveCallHierarchySubtree" use-shortcut-of="CallHierarchy"/>
     <action id="TypeHierarchy.Class" class="com.intellij.ide.hierarchy.ViewClassHierarchyAction"/>
     <action id="TypeHierarchy.Subtypes" class="com.intellij.ide.hierarchy.ViewSubtypesHierarchyAction"/>
     <action id="TypeHierarchy.Supertypes" class="com.intellij.ide.hierarchy.ViewSupertypesHierarchyAction"/>
@@ -1023,6 +1024,7 @@
     </group>
     <group id="CallHierarchyPopupMenu">
       <reference ref="CallHierarchy.BaseOnThisMethod"/>
+      <reference ref="CallHierarchy.RemoveSubtree"/>
     </group>
 
     <group id="HierarchyPopupMenu.Common" searchable="false">

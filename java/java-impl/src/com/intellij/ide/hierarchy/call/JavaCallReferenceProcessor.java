@@ -92,7 +92,7 @@ public class JavaCallReferenceProcessor implements CallReferenceProcessor {
     synchronized (methodToDescriptorMap) {
       CallHierarchyNodeDescriptor d = (CallHierarchyNodeDescriptor)methodToDescriptorMap.get(key);
       if (d == null) {
-        d = new CallHierarchyNodeDescriptor(myProject, parentDescriptor, element, false, true);
+        d = new CallHierarchyNodeDescriptor(myProject, parentDescriptor, element, false, true, context);
         methodToDescriptorMap.put(key, d);
       }
       else if (!d.hasReference(reference)) {

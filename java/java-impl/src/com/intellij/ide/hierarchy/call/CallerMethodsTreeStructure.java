@@ -1,6 +1,8 @@
 // Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.ide.hierarchy.call;
 
+import com.intellij.ide.hierarchy.CallHierarchyTreeStructure;
+import com.intellij.ide.hierarchy.Context;
 import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
 import com.intellij.ide.hierarchy.HierarchyTreeStructure;
 import com.intellij.ide.util.treeView.NodeDescriptor;
@@ -22,19 +24,21 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public final class CallerMethodsTreeStructure extends HierarchyTreeStructure {
+public final class CallerMethodsTreeStructure extends CallHierarchyTreeStructure {
   private final String myScopeType;
+  private final Context context;
 
   /**
    * Should be called in read action
    */
-  public CallerMethodsTreeStructure(@NotNull Project project, @NotNull PsiMember member, String scopeType) {
-    super(project, new CallHierarchyNodeDescriptor(project, null, member, true, false));
+  public CallerMethodsTreeStructure(@NotNull Project project, @NotNull PsiMember member, String scopeType, Context context) {
+    super(project, new CallHierarchyNodeDescriptor(project, null, member, true, false, context));
     myScopeType = scopeType;
+    this.context = context;
   }
 
   @Override
-  protected Object @NotNull [] buildChildren(@NotNull HierarchyNodeDescriptor descriptor) {
+  protected Object @NotNull [] buildChildrenInternal(@NotNull HierarchyNodeDescriptor descriptor) {
     PsiMember enclosingElement = ((CallHierarchyNodeDescriptor)descriptor).getEnclosingElement();
     if (enclosingElement == null) return ArrayUtilRt.EMPTY_OBJECT_ARRAY;
 
@@ -127,7 +131,7 @@ public final class CallerMethodsTreeStructure extends HierarchyTreeStructure {
       .search(enclosingElement, enclosingElement.getUseScope()).findAll().stream()
       .map(PsiReference::getElement)
       .distinct()
-      .map(e -> new CallHierarchyNodeDescriptor(myProject, nodeDescriptor, e, false, false)).toArray();
+      .map(e -> new CallHierarchyNodeDescriptor(myProject, nodeDescriptor, e, false, false, context)).toArray();
   }
 
   private static boolean areClassesRelated(@NotNull PsiClass expectedQualifierClass, @NotNull PsiClass receiverClass) {

@@ -6,8 +6,10 @@ import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.NlsActions;
 import com.intellij.psi.PsiElement;
+import com.intellij.ui.content.Content;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -29,6 +31,8 @@ public abstract class CallHierarchyBrowserBase extends HierarchyBrowserBaseEx {
    */
   @Deprecated
   @NonNls public static final String CALLER_TYPE = "Callers of {0}";
+
+  public static final Key<Context> REMOVED_NODES = new Key<>("REMOVED_NODES");
 
   public CallHierarchyBrowserBase(@NotNull Project project, @NotNull PsiElement method) {
     super(project, method);
@@ -76,6 +80,10 @@ public abstract class CallHierarchyBrowserBase extends HierarchyBrowserBaseEx {
     map.put(getCallerType(), CallHierarchyBrowserBase::getCallerType);
     map.put(getCalleeType(), CallHierarchyBrowserBase::getCalleeType);
     return map;
+  }
+
+  public @NotNull Content getMyContent() {
+    return myContent;
   }
 
   private final class ChangeViewTypeActionBase extends ToggleAction {

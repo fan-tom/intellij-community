@@ -1,6 +1,7 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.jetbrains.python.hierarchy.call;
 
+import com.intellij.ide.hierarchy.CallHierarchyTreeStructure;
 import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
 import com.intellij.ide.hierarchy.HierarchyTreeStructure;
 import com.intellij.openapi.project.Project;
@@ -19,7 +20,7 @@ import java.util.*;
 /**
  * @author novokrest
  */
-public abstract class PyCallHierarchyTreeStructureBase extends HierarchyTreeStructure {
+public abstract class PyCallHierarchyTreeStructureBase extends CallHierarchyTreeStructure {
   private final String myScopeType;
 
   public PyCallHierarchyTreeStructureBase(Project project, PsiElement element, String currentScopeType) {
@@ -31,7 +32,7 @@ public abstract class PyCallHierarchyTreeStructureBase extends HierarchyTreeStru
   protected abstract Map<PsiElement, Collection<PsiElement>> getChildren(@NotNull PyElement element);
 
   @Override
-  protected Object @NotNull [] buildChildren(@NotNull HierarchyNodeDescriptor descriptor) {
+  protected Object @NotNull [] buildChildrenInternal(@NotNull HierarchyNodeDescriptor descriptor) {
     final List<PyHierarchyNodeDescriptor> descriptors = new ArrayList<>();
     if (descriptor instanceof PyHierarchyNodeDescriptor) {
       final PyHierarchyNodeDescriptor pyDescriptor = (PyHierarchyNodeDescriptor)descriptor;

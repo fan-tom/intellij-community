@@ -1,8 +1,7 @@
 // Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.ide.hierarchy.call;
 
-import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
-import com.intellij.ide.hierarchy.HierarchyTreeStructure;
+import com.intellij.ide.hierarchy.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.search.searches.OverridingMethodsSearch;
@@ -16,22 +15,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class CalleeMethodsTreeStructure extends HierarchyTreeStructure {
+public final class CalleeMethodsTreeStructure extends CallHierarchyTreeStructure {
   private final String myScopeType;
+  private final Context context;
 
   /**
    * Should be called in read action
    */
-  public CalleeMethodsTreeStructure(@NotNull Project project, @NotNull PsiMember member, String scopeType) {
-    super(project, new CallHierarchyNodeDescriptor(project, null, member, true, false));
+  public CalleeMethodsTreeStructure(@NotNull Project project, @NotNull PsiMember member, String scopeType, Context context) {
+    super(project, new CallHierarchyNodeDescriptor(project, null, member, true, false, context));
+    this.context = context;
     myScopeType = scopeType;
   }
 
   @Override
-  protected Object @NotNull [] buildChildren(@NotNull HierarchyNodeDescriptor descriptor) {
+  protected CallHierarchyNodeDescriptorBase @NotNull [] buildChildrenInternal(@NotNull HierarchyNodeDescriptor descriptor) {
     PsiMember enclosingElement = ((CallHierarchyNodeDescriptor)descriptor).getEnclosingElement();
     if (!(enclosingElement instanceof PsiMethod)) {
-      return ArrayUtilRt.EMPTY_OBJECT_ARRAY;
+      return ArrayUtil.newArray(CallHierarchyNodeDescriptorBase.class, 0);
     }
     PsiMethod method = (PsiMethod)enclosingElement;
 
@@ -59,7 +60,7 @@ public final class CalleeMethodsTreeStructure extends HierarchyTreeStructure {
 
       CallHierarchyNodeDescriptor d = methodToDescriptorMap.get(callee);
       if (d == null) {
-        d = new CallHierarchyNodeDescriptor(myProject, descriptor, callee, false, false);
+        d = new CallHierarchyNodeDescriptor(myProject, descriptor, callee, false, false, context);
         methodToDescriptorMap.put(callee, d);
         result.add(d);
       }
@@ -68,7 +69,7 @@ public final class CalleeMethodsTreeStructure extends HierarchyTreeStructure {
       }
     }
 
-    return ArrayUtil.toObjectArray(result);
+    return ArrayUtil.toObjectArray(result, CallHierarchyNodeDescriptorBase.class);
   }
 
 

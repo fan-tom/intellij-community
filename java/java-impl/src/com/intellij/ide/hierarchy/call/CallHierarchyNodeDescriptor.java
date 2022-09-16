@@ -4,6 +4,8 @@ package com.intellij.ide.hierarchy.call;
 import com.intellij.codeInsight.highlighting.HighlightManager;
 import com.intellij.core.JavaPsiBundle;
 import com.intellij.ide.IdeBundle;
+import com.intellij.ide.hierarchy.CallHierarchyNodeDescriptorBase;
+import com.intellij.ide.hierarchy.Context;
 import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
 import com.intellij.ide.hierarchy.JavaHierarchyUtil;
 import com.intellij.java.JavaBundle;
@@ -27,7 +29,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor implements Navigatable {
+public final class CallHierarchyNodeDescriptor extends CallHierarchyNodeDescriptorBase implements Navigatable {
   private int myUsageCount = 1;
   private final List<PsiReference> myReferences = new ArrayList<>();
   private final boolean myNavigateToReference;
@@ -36,8 +38,10 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
                                      HierarchyNodeDescriptor parentDescriptor,
                                      @NotNull PsiElement element,
                                      boolean isBase,
-                                     boolean navigateToReference) {
-    super(project, parentDescriptor, element, isBase);
+                                     boolean navigateToReference,
+                                     Context context
+  ) {
+    super(project, parentDescriptor, element, isBase, context);
     myNavigateToReference = navigateToReference;
   }
 
